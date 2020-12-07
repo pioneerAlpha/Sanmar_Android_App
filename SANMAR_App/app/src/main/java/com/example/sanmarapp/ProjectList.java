@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 public class ProjectList extends AppCompatActivity {
 
+    ArrayList<ProjectArray> projList = new ArrayList<>();
+
     RecyclerView recyclerView;
     RecyclerView.Adapter projectAdapter;
     RecyclerView.LayoutManager layoutManager;
@@ -33,11 +35,6 @@ public class ProjectList extends AppCompatActivity {
     private static final String KEY_PASSWORD = "password";
 
     private AlertDialog.Builder alertDialogBuilder;
-
-    int [] projectImage = {R.drawable.img1, R.drawable.img2, R.drawable.img3, R.drawable.img4, R.drawable.img5, R.drawable.img6, R.drawable.img7, R.drawable.img8, R.drawable.img9, R.drawable.img10, R.drawable.img11, R.drawable.img12};
-    String [] projectName = {"Project 1", "Project 2", "Project 3", "Project 4", "Project 5", "Project 6", "Project 7", "Project 8", "Project 9", "Project 10", "Project 11", "Project 12"};
-    String [] projectAddress = {"322/B, Gulshan, Dhaka.", "322/B, Dhanmondi, Dhaka.", "322/B, Mohakhali, Dhaka.", "322/B, Khilgaon, Dhaka.", "322/B, Khulna.", "322/B, Comilla.", "322/B, Jamalpur.", "322/B, Bikrampur.", "322/B, Rajshahi.", "322/B, Chittagong.", "322/B, Barishal.", "322/B, Khulna."};
-    String [] projectCategory = {"Category A1", "Category A2", "Category A3", "Category A4", "Category A5", "Category A6", "Category A7", "Category A8", "Category A9", "Category A10", "Category A11", "Category A12"};
 
 
     @Override
@@ -56,7 +53,21 @@ public class ProjectList extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
 
-        projectAdapter = new ProjectAdapter(this, projectImage, projectName, projectAddress, projectCategory);
+        projList.add(new ProjectArray(R.drawable.img1, "Project 1", "322/B, Gulshan, Dhaka.", "Category A1"));
+        projList.add(new ProjectArray(R.drawable.img2, "Project 2", "443/A, Dhanmondi, Dhaka.", "Category A2"));
+        projList.add(new ProjectArray(R.drawable.img3, "Project 3", "232/B, Banani, Dhaka.", "Category A6"));
+        projList.add(new ProjectArray(R.drawable.img4, "Project 4", "878/B, Kakrail, Dhaka.", "Category B1"));
+        projList.add(new ProjectArray(R.drawable.img5, "Project 5", "453/D, Mirpur, Dhaka.", "Category A11"));
+        projList.add(new ProjectArray(R.drawable.img6, "Project 6", "544/F, Old Dhaka, Dhaka.", "Category C1"));
+        projList.add(new ProjectArray(R.drawable.img7, "Project 7", "875/K, Jigatola, Dhaka.", "Category A1"));
+        projList.add(new ProjectArray(R.drawable.img8, "Project 8", "36/A, Uttora, Dhaka.", "Category A1"));
+        projList.add(new ProjectArray(R.drawable.img9, "Project 9", "34/C, Khilgaon, Dhaka.", "Category B2"));
+        projList.add(new ProjectArray(R.drawable.img10, "Project 10", "394/E, Rampura, Dhaka.", "Category A1"));
+        projList.add(new ProjectArray(R.drawable.img11, "Project 11", "345/G, Badda, Dhaka.", "Category B1"));
+        projList.add(new ProjectArray(R.drawable.img12, "Project 12", "80/D, Niketon, Dhaka.", "Category A1"));
+
+
+        projectAdapter = new ProjectAdapter(this, projList);
         recyclerView.setAdapter(projectAdapter);
 
 

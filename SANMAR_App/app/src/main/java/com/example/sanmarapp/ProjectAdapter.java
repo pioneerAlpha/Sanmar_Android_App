@@ -13,13 +13,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHolder> {
 
     Context context;
-    int [] projectImage;
-    String [] projectName;
-    String [] projectAddress;
-    String [] projectCategory;
+    ArrayList<ProjectArray> projList;
+
+    public ProjectAdapter(Context context, ArrayList<ProjectArray> projList) {
+        this.context = context;
+        this.projList = projList;
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -40,14 +45,6 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
         }
     }
 
-    public ProjectAdapter(Context context, int [] projectImage, String [] projectName, String [] projectAddress, String [] projectCategory){
-        this.context = context;
-        this.projectImage = projectImage;
-        this.projectName = projectName;
-        this.projectAddress = projectAddress;
-        this.projectCategory = projectCategory;
-    }
-
     @NonNull
     @Override
     public ProjectAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -60,15 +57,18 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ProjectAdapter.ViewHolder holder, final int position) {
-        holder.projImage.setImageResource(projectImage[position]);
-        holder.projName.setText(projectName[position]);
-        holder.projAddress.setText(projectAddress[position]);
-        holder.projCat.setText(projectCategory[position]);
+
+        final ProjectArray projectArray = projList.get(position);
+
+        holder.projImage.setImageResource(projectArray.getProjectImage());
+        holder.projName.setText(projectArray.getProjectName());
+        holder.projAddress.setText(projectArray.getProjectAddress());
+        holder.projCat.setText(projectArray.getProjectCategory());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, projectName[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, projectArray.getProjectName(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -76,10 +76,10 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ProjectDetails.class);
-                intent.putExtra("image", projectImage[position]);
-                intent.putExtra("name", projectName[position]);
-                intent.putExtra("address", projectAddress[position]);
-                intent.putExtra("category", projectCategory[position]);
+                intent.putExtra("image", projectArray.getProjectImage());
+                intent.putExtra("name", projectArray.getProjectName());
+                intent.putExtra("address", projectArray.getProjectAddress());
+                intent.putExtra("category", projectArray.getProjectCategory());
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
@@ -89,7 +89,6 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return projectName.length;
+        return projList.size();
     }
-
 }
