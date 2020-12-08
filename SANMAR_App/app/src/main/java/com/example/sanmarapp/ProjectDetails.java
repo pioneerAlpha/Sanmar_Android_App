@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ public class ProjectDetails extends AppCompatActivity {
     TextView nameDetails;
     TextView addressDetails;
     TextView catDetails;
+    Button playButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +41,22 @@ public class ProjectDetails extends AppCompatActivity {
         nameDetails = findViewById(R.id.name_details);
         addressDetails = findViewById(R.id.address_details);
         catDetails = findViewById(R.id.category_details);
+        playButton = findViewById(R.id.play_button);
 
         imgDetails.setImageResource(getIntent().getIntExtra("image", 0));
         nameDetails.setText(getIntent().getStringExtra("name"));
         addressDetails.setText(getIntent().getStringExtra("address"));
         catDetails.setText(getIntent().getStringExtra("category"));
 
-    }
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PlayVideoActivity.class);
+                startActivity(intent);
+            }
+        });
 
+    }
 
     @Override
     public void onBackPressed() {
@@ -63,5 +73,4 @@ public class ProjectDetails extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
