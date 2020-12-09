@@ -44,7 +44,7 @@ public class ProjectDetails extends AppCompatActivity {
         playButton = findViewById(R.id.play_button);
 
         imgDetails.setImageResource(getIntent().getIntExtra("image", 0));
-        nameDetails.setText(getIntent().getStringExtra("name"));
+        nameDetails.setText(getIntent().getStringExtra("projectName"));
         addressDetails.setText(getIntent().getStringExtra("address"));
         catDetails.setText(getIntent().getStringExtra("category"));
 

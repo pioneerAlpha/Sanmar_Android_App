@@ -33,6 +33,7 @@ public class ProjectList extends AppCompatActivity {
     private static final String SHARED_PREF_NAME = "mypref";
     private static final String KEY_EMAIL = "name";
     private static final String KEY_PASSWORD = "password";
+    private String userEmail;
 
     private AlertDialog.Builder alertDialogBuilder;
 
@@ -52,6 +53,7 @@ public class ProjectList extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+        userEmail = sharedPreferences.getString(KEY_EMAIL, null);
 
         projList.add(new ProjectArray(R.drawable.img1, "Project 1", "322/B, Gulshan, Dhaka.", "Category A1"));
         projList.add(new ProjectArray(R.drawable.img2, "Project 2", "443/A, Dhanmondi, Dhaka.", "Category A2"));
@@ -122,7 +124,17 @@ public class ProjectList extends AppCompatActivity {
         if (id == android.R.id.home) {
             onBackPressed();
         }
-        if(id == R.id.menu_logout){
+        if (id == R.id.menu_profile) {
+            if(userEmail != null) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(KEY_EMAIL, userEmail);
+                editor.apply();
+
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        }
+        if (id == R.id.menu_logout) {
 
             alertDialogBuilder = new AlertDialog.Builder(ProjectList.this);
             //for setting title;

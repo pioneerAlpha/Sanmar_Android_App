@@ -77,7 +77,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
             public void onClick(View view) {
                 Intent intent = new Intent(context, ProjectDetails.class);
                 intent.putExtra("image", projectArray.getProjectImage());
-                intent.putExtra("name", projectArray.getProjectName());
+                intent.putExtra("projectName", projectArray.getProjectName());
                 intent.putExtra("address", projectArray.getProjectAddress());
                 intent.putExtra("category", projectArray.getProjectCategory());
 
