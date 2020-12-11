@@ -15,8 +15,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.sanmarapp.model.UserCredentials;
+import com.example.sanmarapp.sanmarAPI.RetrofitSanmarApi;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     EditText email, password;
     Button loginBtn;
 
@@ -26,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String SHARED_PREF_NAME = "mypref";
     private static final String KEY_EMAIL = "name";
     private static final String KEY_PASSWORD = "password";
+    private static final String BASE_URL = "http://3.21.122.37/";
+
+    private static RetrofitSanmarApi sanmarApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         email = findViewById(R.id.email_id);
         password = findViewById(R.id.password_id);
         loginBtn = findViewById(R.id.login_btnID);
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        sanmarApiService = retrofit.create(RetrofitSanmarApi.class);
 
         //for Shared Preferences
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
@@ -54,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String eamilAddress = email.getText().toString().trim();
+                String emailAddress = email.getText().toString().trim();
                 String passwordInput = password.getText().toString().trim();
 
-                if(eamilAddress.isEmpty()){
+                if(emailAddress.isEmpty()){
                     email.setError("Email Address Can't be Empty.");
                 }
-                else if(!Patterns.EMAIL_ADDRESS.matcher(eamilAddress).matches()) {
+                else if(!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()) {
                     email.setError("Enter a Valid Email Address");
                     email.requestFocus();
                     return;
@@ -74,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
                     password.setError("Minimum Length of the Password Should be 5");
                 }
                 else {
+                    authenticateUser(emailAddress, passwordInput);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(KEY_EMAIL, eamilAddress);
+                    editor.putString(KEY_EMAIL, emailAddress);
                     editor.putString(KEY_PASSWORD, passwordInput);
                     editor.apply();
 
@@ -86,6 +107,49 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void authenticateUser(String userEmail, String userPassword) {
+//        UserCredentials userCredentials = new UserCredentials(userEmail, userPassword);
+//        Call<UserCredentials> call = sanmarApiService.postUserCredentials(userCredentials);
+
+        Call<UserCredentials> call = sanmarApiService.getUserCredentials(userEmail, userPassword);
+        call.enqueue(new Callback<UserCredentials>() {
+            @Override
+            public void onResponse(Call<UserCredentials> call, Response<UserCredentials> response) {
+                if (!response.isSuccessful()) {
+                    // response not successful
+                    Log.e(TAG, "onResponse: response not successful");
+                    return;
+                }
+                Log.d(TAG, "onResponse: response code: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Call<UserCredentials> call, Throwable t) {
+                Log.d(TAG, "onFailure: failed");
+                t.printStackTrace();
+            }
+        });
+/*
+        Call<UserCredentials> call = sanmarApiService.postUserCredentials(userEmail, userPassword);
+        call.enqueue(new Callback<UserCredentials>() {
+            @Override
+            public void onResponse(Call<UserCredentials> call, Response<UserCredentials> response) {
+                if (!response.isSuccessful()) {
+                    // response not successful
+                    Log.e(TAG, "onResponse: response not successful");
+                    return;
+                }
+                Log.d(TAG, "onResponse: response code: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Call<UserCredentials> call, Throwable t) {
+                Log.d(TAG, "onFailure: failed");
+            }
+        });
+*/
     }
 
     @Override
