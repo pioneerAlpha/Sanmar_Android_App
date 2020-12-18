@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,14 +15,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class ProjectList extends AppCompatActivity {
+public class ProjectList extends Fragment {
 
     ArrayList<ProjectArray> projList = new ArrayList<>();
 
@@ -29,31 +32,21 @@ public class ProjectList extends AppCompatActivity {
     RecyclerView.Adapter projectAdapter;
     RecyclerView.LayoutManager layoutManager;
 
-    SharedPreferences sharedPreferences;
-    private static final String SHARED_PREF_NAME = "mypref";
-    private static final String KEY_EMAIL = "name";
-    private static final String KEY_PASSWORD = "password";
-    private String userEmail;
-
-    private AlertDialog.Builder alertDialogBuilder;
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle){
+        View view = inflater.inflate(R.layout.activity_project_list, viewGroup, false);
+        init(view);
+        return view;
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Project List");
+    }
 
-        recyclerView = findViewById(R.id.recview_id);
+    private void init(View view) {
+
+        recyclerView = view.findViewById(R.id.recview_id);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
-        userEmail = sharedPreferences.getString(KEY_EMAIL, null);
 
         projList.add(new ProjectArray(R.drawable.img1, "Project 1", "322/B, Gulshan, Dhaka.", "Category A1"));
         projList.add(new ProjectArray(R.drawable.img2, "Project 2", "443/A, Dhanmondi, Dhaka.", "Category A2"));
@@ -68,110 +61,8 @@ public class ProjectList extends AppCompatActivity {
         projList.add(new ProjectArray(R.drawable.img11, "Project 11", "345/G, Badda, Dhaka.", "Category B1"));
         projList.add(new ProjectArray(R.drawable.img12, "Project 12", "80/D, Niketon, Dhaka.", "Category A1"));
 
-
-        projectAdapter = new ProjectAdapter(this, projList);
+        projectAdapter = new ProjectAdapter(getContext(), projList);
         recyclerView.setAdapter(projectAdapter);
 
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        alertDialogBuilder = new AlertDialog.Builder(ProjectList.this);
-        //for setting title;
-        alertDialogBuilder.setTitle("Exit?");
-
-        //for setting message;
-        alertDialogBuilder.setMessage("Do you want to exit?");
-
-        //for setting icon;
-        alertDialogBuilder.setIcon(R.drawable.tips);
-
-
-        //for setting positive button;
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //for exiting the app;
-                finish();
-                moveTaskToBack(true);
-            }
-        });
-
-        //for setting negative button;
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //for exiting the app;
-                dialogInterface.cancel();
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            onBackPressed();
-        }
-        if (id == R.id.menu_profile) {
-            if(userEmail != null) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(KEY_EMAIL, userEmail);
-                editor.apply();
-
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(intent);
-            }
-        }
-        if (id == R.id.menu_logout) {
-
-            alertDialogBuilder = new AlertDialog.Builder(ProjectList.this);
-            //for setting title;
-            alertDialogBuilder.setTitle("Logout?");
-
-            //for setting message;
-            alertDialogBuilder.setMessage("Do you want to logout?");
-
-
-            //for setting positive button;
-            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //for logout from the app;
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
-                    editor.commit();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                    Toast.makeText(getApplicationContext(), "Logout Successful", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            //for setting negative button;
-            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //for exiting the app;
-                    dialogInterface.cancel();
-                }
-            });
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

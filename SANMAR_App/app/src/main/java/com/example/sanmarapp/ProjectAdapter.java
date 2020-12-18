@@ -32,7 +32,6 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
         TextView projName;
         TextView projAddress;
         TextView projCat;
-        Button itemBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -41,7 +40,6 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
             projName = itemView.findViewById(R.id.project_nameID);
             projAddress = itemView.findViewById(R.id.project_addressID);
             projCat = itemView.findViewById(R.id.project_catID);
-            itemBtn = itemView.findViewById(R.id.item_button);
         }
     }
 
@@ -72,7 +70,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
             }
         });
 
-        holder.itemBtn.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ProjectDetails.class);
