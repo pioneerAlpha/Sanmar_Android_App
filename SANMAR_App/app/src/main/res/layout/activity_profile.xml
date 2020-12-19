@@ -17,7 +17,6 @@
         android:scaleType="fitXY"
         android:padding="2dp"
         android:background="@drawable/details_item_image"
-        android:src="@drawable/tips"
         android:layout_margin="5dp"
         />
 

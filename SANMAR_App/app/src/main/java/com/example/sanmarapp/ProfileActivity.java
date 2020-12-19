@@ -3,6 +3,7 @@ package com.example.sanmarapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,18 +11,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.sanmarapp.model.UserCredentials;
+
 public class ProfileActivity extends AppCompatActivity {
 
     ImageView profileImage;
     TextView profileName;
     TextView profileEmail;
 
+    UserCredentials userCredentials;
+
     SharedPreferences sharedPreferences;
     private static final String SHARED_PREF_NAME = "mypref";
-    private static final String KEY_EMAIL = "name";
+    private static final String KEY_EMAIL = "email";
 
     private String userEmail;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

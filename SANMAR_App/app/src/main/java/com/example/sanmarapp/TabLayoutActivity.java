@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import com.example.sanmarapp.model.UserCredentials;
 import com.google.android.material.tabs.TabLayout;
 
 public class TabLayoutActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class TabLayoutActivity extends AppCompatActivity {
     ViewPager viewPager;
     SharedPreferences sharedPreferences;
     private static final String SHARED_PREF_NAME = "mypref";
-    private static final String KEY_EMAIL = "name";
+    private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
     private String userEmail;
 
@@ -65,10 +66,6 @@ public class TabLayoutActivity extends AppCompatActivity {
 
         //for setting message;
         alertDialogBuilder.setMessage("Do you want to exit?");
-
-        //for setting icon;
-        alertDialogBuilder.setIcon(R.drawable.tips);
-
 
         //for setting positive button;
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -133,7 +130,7 @@ public class TabLayoutActivity extends AppCompatActivity {
                     //for logout from the app;
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.clear();
-                    editor.commit();
+                    editor.apply();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
